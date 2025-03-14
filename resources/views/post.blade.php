@@ -4,16 +4,16 @@
 <div>
     <!-- I begin to speak only when I am certain what I will say is not better left unsaid. - Cato the Younger -->
     <h1>{{ $title }} {{ $id }}</h1>
-    <h1 class="text-5xl text-red-500">Test Tailwind</h1>
+
 
     <p>
     <div class="bg-red-500">
         Espèce :
         @foreach ($species as $specie)
         @php
-
+            $speciesId = explode('/', rtrim($specie["url"], '/'));
         @endphp
-        <a href="">
+        <a href="{{ route('blog.species', $speciesId[5]) }}">
             {{ $specie["name"] }}
         </a>
         @endforeach
@@ -59,7 +59,7 @@
             @php
             $vehicleId = explode('/', rtrim($vehicle["url"], '/'));
             @endphp
-            <a href="">
+            <a href="{{ route('blog.vehicle', $vehicleId[5]) }}">
                 <li>{{ $vehicle["name"] }}</li>
             </a>
             @endforeach
@@ -79,7 +79,11 @@
                     <p>
                         "{!! nl2br($comment->content) !!}"
                     </p>
-                    <div>
+                    <div style="display: flex; flex-direction: row; gap: 3rem; justify-content:center; align-items: center;">
+                        <a href="{{ route('comment.edit', $comment->id) }}"
+                            style="text-decoration:none;background-color: green; color:white; border-radius: 5rem; border:none; padding: 1rem 2rem 1rem 2rem; font-weight: bold; text-transform: uppercase;">
+                            Edit your comment
+                        </a>
                         <form method="post" action="{{ route('comment.delete') }}">
                             {{ csrf_field()  }}
                             @method('DELETE')
@@ -90,7 +94,6 @@
                             value="delete">
                         </form>
                     </div>
-                    <a href="{{ route('comment.edit', $comment->id) }}">Edit your comment</a>
                 </div>
             @endforeach
         @endif
