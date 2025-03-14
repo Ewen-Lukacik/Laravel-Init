@@ -39,18 +39,27 @@ class CommentController extends Controller
         return redirect()->route('blog.people', $peopleId);
     }
 
-    public function edit(Request $request)
+    public function edit(int $commentId)
     {
-        $commentId = $request->get('comment_id');
-        $commentToEdit = DB::table('comments')->where('id', $commentId);
-
-        if($request->method() == 'POST'){
-            echo 'coucou etienne c maman';
-        }
+        $commentToEdit = DB::table('comments')->where('id', $commentId)->first();
 
         return view('edit', [
             'comment' => $commentToEdit,
             'commentId' => $commentId
         ]);
     }
+
+    public function update(Request $request, int $commentId)
+    {
+        $comment = DB::table('comments')->where('id', $commentId)->first();
+        $comment_decoded = json_decode(json_encode($comment), true);
+        $peopleId = $comment_decoded["people_id"];
+
+        $content = $request->get('content');
+        $editedComment = DB::table('comments')->where('id', $commentId)->update(['content' => $content]);
+        // dd($editedComment);
+
+        return redirect()->route('blog.people', $peopleId);
+    }
+
 }
