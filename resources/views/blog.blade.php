@@ -6,6 +6,7 @@
     <h1>{{ $title }}</h1>
 
     <div>
+
         <h2>List of people :</h2>
 
 
@@ -22,6 +23,33 @@
         </article>
         @endforeach
     </div>
+    <br><br>
+
+
+    Search post commented by someone :
+    <form method="get" action="{{ route('blog.home', $current_page) }}">
+        <input type="text" name="search" placeholder="Anakin Skywalker">
+        <button>Submit</button>
+    </form>
+
+    <div class="background-color: lightgray; width: 33vw">
+        @if ($comments_named)
+            {{ $search }} has commented these posts :
+            <br>
+            <ul>
+                @foreach ($comments_named as $comment)
+                    <li>
+                        <a href="{{ route('blog.people', $comment["comment"]->people_id) }}">
+                            {{ $comment["name"] }}
+                        </a>
+                    </li>
+                @endforeach
+            </ul>
+        @endif
+    </div>
+
+
+    <br><br><br>
 
     <div class="nav-page">
         @php
